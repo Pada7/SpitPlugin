@@ -8,15 +8,18 @@
 
     <groupId>hex.wald</groupId>
     <artifactId>spitplugin</artifactId>
-    <version>1.0</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <name>SpitPlugin</name>
+    <description>Spit like a llama. Bukkit plugin for Spigot/Paper 26.3.</description>
 
     <properties>
-        <java.version>1.8</java.version>
+        <!-- Java 21 bytecode: Paper/Spigot 26.3 itself needs Java SE 25 at runtime,
+             but there is no reason for the plugin to require more than 21. -->
+        <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <server.plugins.dir>C:\Test-Server\plugins</server.plugins.dir>
+        <spigot-api.version>26.3-R0.1-SNAPSHOT</spigot-api.version>
     </properties>
 
     <repositories>
@@ -30,7 +33,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <version>${spigot-api.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -41,47 +44,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <mkdir dir="${server.plugins.dir}"/>
-                                <copy file="${project.build.directory}\${project.build.finalName}.jar"
-                                      tofile="${server.plugins.dir}\SpitPlugin.jar"
-                                      overwrite="true"/>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
             </plugin>
 
         </plugins>
@@ -93,5 +65,42 @@
             </resource>
         </resources>
     </build>
+
+    <profiles>
+        <!-- Optional convenience for local testing: mvn package -Dserver.plugins.dir=C:\Test-Server\plugins -->
+        <profile>
+            <id>copy-to-server</id>
+            <activation>
+                <property>
+                    <name>server.plugins.dir</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <mkdir dir="${server.plugins.dir}"/>
+                                        <copy file="${project.build.directory}/${project.build.finalName}.jar"
+                                              tofile="${server.plugins.dir}/SpitPlugin.jar"
+                                              overwrite="true"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

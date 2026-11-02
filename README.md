@@ -2,13 +2,15 @@
 
 **SpitPlugin** is a fun and lightweight Minecraft plugin for Spigot/Paper servers that allows players to spit like llamas 🦙 — perfect for adding chaos, humor, and unique interactions to your server.
 
+> Supported version: **Minecraft 26.3** (Spigot / Paper). Requires Java SE 25 on the server.
+
 ---
 
 ## ✨ Features
 
 * 💦 Player command to spit projectiles
-* 🔊 Optional sound effects
-* ⏱️ Cooldown system to prevent spam
+* 🎨 Spit type menu (`/spitmenu`) with dust, bone meal, honey and slime effects
+* 🔊 Sound effects on launch
 * 🔒 Permission-based access
 
 ---
@@ -24,21 +26,18 @@
 
 ## 📜 Commands
 
-| Command        | Description                 |
-| -------------- | --------------------------- |
-| `/spit`        | Shoot a spit projectile     |
-| `/spit reload` | Reload plugin configuration |
+| Command     | Description                       |
+| ----------- | --------------------------------- |
+| `/spit`     | Shoot a spit projectile           |
+| `/spitmenu` | Open the spit type selection menu |
 
 ---
 
 ## 🔐 Permissions
 
-| Permission    | Description                 |
-| ------------- | --------------------------- |
-| `spit.use`    | Allows usage of `/spit`     |
-| `spit.reload` | Allows reloading the config |
-
----
+| Permission | Description                             |
+| ---------- | --------------------------------------- |
+| `spit.use` | Allows usage of `/spit` and `/spitmenu` |
 
 ---
 
@@ -46,18 +45,16 @@
 
 When a player uses `/spit`:
 
-* A projectile (llama spit) is launched forward
-* On impact:
-
-  * Deals damage (if enabled)
-  * Plays sound effects (optional)
+* A llama spit projectile is launched forward
+* Its flight path is traced with particles that match the selected spit type
+* On impact it deals 1 damage, plays the llama spit sound and spawns a particle burst
 
 ---
 
 ## 📌 Requirements
 
-* Java 17+
-* Spigot or Paper server
+* Minecraft **26.3** server (Spigot or Paper)
+* Java SE **25** (required by the 26.3 server; the plugin itself is built as Java 21 bytecode)
 
 ---
 
@@ -66,6 +63,18 @@ When a player uses `/spit`:
 ```bash
 mvn clean package
 ```
+
+The plugin jar is written to `target/spitplugin-<version>.jar`. To also copy it into a test server:
+
+```bash
+mvn clean package -Dserver.plugins.dir=/path/to/server/plugins
+```
+
+---
+
+## 📜 Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

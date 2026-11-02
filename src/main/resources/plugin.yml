@@ -1,16 +1,20 @@
 name: SpitPlugin
-version: 1.0
+version: '${project.version}'
 main: hex.wald.spitplugin.SpitPlugin
-api-version: 1.20
+api-version: '26.3'
+description: Spit like a llama - launches llama spit projectiles with particle effects.
+author: HexWald
+website: https://github.com/Pada7/SpitPlugin
 
 commands:
   spit:
-    description: Spit command
+    description: Shoot a spit projectile
     usage: /spit
   spitmenu:
-    description: Spit menu command
+    description: Open the spit type selection menu
     usage: /spitmenu
 
 permissions:
   spit.use:
+    description: Allows using /spit and /spitmenu
     default: true

@@ -69,7 +69,7 @@ public class SpitMenu {
         }
 
         if (selected) {
-            item.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.DURABILITY, 1);
+            item.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.UNBREAKING, 1);
         }
 
         return item;
