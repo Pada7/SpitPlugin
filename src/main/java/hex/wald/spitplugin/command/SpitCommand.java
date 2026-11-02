@@ -18,14 +18,14 @@ public class SpitCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this command.");
+            sender.sendMessage("该命令只能由游戏内玩家执行。");
             return true;
         }
 
         Player player = (Player) sender;
 
         if (!player.hasPermission("spit.use")) {
-            player.sendMessage(ChatColor.RED + "No Permission.");
+            player.sendMessage(ChatColor.RED + "你没有权限使用这个命令。");
             return true;
         }
 
