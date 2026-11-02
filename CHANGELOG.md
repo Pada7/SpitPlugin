@@ -2,6 +2,37 @@
 
 All notable changes to SpitPlugin are documented here.
 
+## v2.1.0 — 命令可配置
+
+新增 `config.yml`，命令名、别名、权限、描述、用法和提示文本都可以自己改。
+
+### 新增
+
+- `config.yml`（首次启动自动生成，带中文注释）：
+  - `command.name`：主命令名，改成 `tukou` 后就是 `/tukou`；
+  - `command.aliases`：命令别名，支持中文，例如 `/吐口水`；
+  - `command.permission`：权限节点，留空表示不检查权限；
+  - `command.description` / `command.usage`：`/help` 里显示的描述与用法（`%command%` 占位符）；
+  - `messages.players-only` / `messages.no-permission`：提示文本，支持 `&` 颜色代码。
+- 命令改为按配置动态注册（`CommandMap`），因此命令名不再写死在 `plugin.yml` 里。
+- 权限节点按 `command.permission` 自动注册，默认所有玩家可用，改成自定义节点也无需额外配置。
+
+### 健壮性
+
+- 命令名带空格等非法配置会输出警告并回退到 `spit`，不会导致命令消失。
+- 别名里多余的斜杠会自动去掉，与主命令重名的别名会被忽略。
+- 命令名与其他插件冲突时自动改用 `spitplugin:<命令名>` 并给出警告。
+
+### 验证
+
+在 Paper 26.3 build 237 上实测：默认配置 `/spit`、`/spitout` 正常；改成 `name: tukou` + 中文别名后 `/tukou`、`/吐口水` 正常且 `/spit` 已失效；非法命令名会回退并告警。
+
+### English
+
+- New `config.yml`: the command name, aliases (Chinese supported), permission node, description, usage and both messages are configurable.
+- The command is now registered dynamically through Bukkit's `CommandMap` instead of being hard-coded in `plugin.yml`.
+- Invalid configuration falls back to a safe default with a warning; colliding command names are namespaced as `spitplugin:<name>`.
+
 ## v2.0.0 — 汉化，只保留默认羊驼口水
 
 **破坏性变更**：`/spitmenu` 命令与喷吐类型选择菜单已被移除。

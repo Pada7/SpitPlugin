@@ -5,13 +5,3 @@ api-version: '26.3'
 description: 像羊驼一样吐口水，朝准星方向发射一只羊驼口水。
 author: HexWald
 website: https://github.com/Pada7/SpitPlugin
-
-commands:
-  spit:
-    description: 朝准星方向吐一口口水
-    usage: /spit
-
-permissions:
-  spit.use:
-    description: 允许使用 /spit 吐口水
-    default: true

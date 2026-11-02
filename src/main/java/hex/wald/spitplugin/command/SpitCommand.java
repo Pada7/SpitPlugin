@@ -1,35 +1,51 @@
 package hex.wald.spitplugin.command;
 
 import hex.wald.spitplugin.service.SpitProjectileService;
-import org.bukkit.ChatColor;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class SpitCommand implements CommandExecutor {
+/**
+ * 命令对象由 config.yml 动态创建，因此这里继承 {@link Command} 而不是实现 CommandExecutor。
+ */
+public class SpitCommand extends Command {
 
     private final SpitProjectileService projectileService;
+    private final String permission;
+    private final String playersOnlyMessage;
+    private final String noPermissionMessage;
 
-    public SpitCommand(SpitProjectileService projectileService) {
+    public SpitCommand(String name, SpitProjectileService projectileService, String permission,
+                       String playersOnlyMessage, String noPermissionMessage) {
+        super(name);
         this.projectileService = projectileService;
+        this.permission = permission;
+        this.playersOnlyMessage = playersOnlyMessage;
+        this.noPermissionMessage = noPermissionMessage;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("该命令只能由游戏内玩家执行。");
+            sender.sendMessage(playersOnlyMessage);
             return true;
         }
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission("spit.use")) {
-            player.sendMessage(ChatColor.RED + "你没有权限使用这个命令。");
+        if (permission != null && !permission.isEmpty() && !player.hasPermission(permission)) {
+            player.sendMessage(noPermissionMessage);
             return true;
         }
 
         projectileService.launch(player);
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
+        return Collections.emptyList();
     }
 }
